@@ -1,0 +1,5 @@
+images,s,a,"m67*.fit",,,"CCD images"
+parameter,s,a,"imagetype",,,"Image header parameter"
+value,s,a,"object",,,"Parameter value"
+type,s,h,"string",string|real|integer,,"Parameter type (string|real|integer)"
+mode,s,h,"ql",,,

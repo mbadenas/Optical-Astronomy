@@ -1,0 +1,13 @@
+#! /bin/bash
+#
+#   This scripts formats the output of rotsephot.cl
+#
+
+infiles=`ls *.alsf`
+for inf in ${infiles}
+do
+  cat ${inf} | grep -v INDEF > tmp.dat
+  awk '{printf "%5s %9.4f %9.4f %7.3f %6.3f %7.1f %7.3f %7.3f\n",$1,$2,$3,$4,$5,$6,$7,$8}' tmp.dat > ${inf}_fmt
+  rm tmp.dat
+done
+    

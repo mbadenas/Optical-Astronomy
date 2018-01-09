@@ -1,0 +1,4 @@
+input,s,a,"m67_y_3[54:2102,1:4096]",,,"Input images"
+output,s,a,"m67_y_3_crop",,,"Output images or directory"
+verbose,b,h,yes,,,"Print operations performed?"
+mode,s,h,"ql",,,

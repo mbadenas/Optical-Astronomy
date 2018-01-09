@@ -1,0 +1,47 @@
+
+Nov 16 15:45: IMCOMBINE
+  combine = average, scale = none, zero = none, weight = none
+  reject = minmax, nlow = 0, nhigh = 1
+  blank = 0.
+                Images 
+       bias_1_crop.fits
+       bias_2_crop.fits
+       bias_3_crop.fits
+       bias_4_crop.fits
+       bias_5_crop.fits
+       bias_6_crop.fits
+       bias_7_crop.fits
+       bias_8_crop.fits
+       bias_9_crop.fits
+
+  Output image = zero, ncombine = 9
+
+Nov 16 15:54: IMCOMBINE
+  combine = median, scale = mode, zero = none, weight = none
+  reject = ccdclip, mclip = yes, nkeep = 1
+  rdnoise = RDNOISE, gain = GAIN, snoise = 0., sigma = 3., hsigma = 3.
+  blank = 1.
+                Images     Mode Rdnoise   Gain  Scale
+     flat_b_1_zero.fits  21306.     3.9    2.8  0.697
+     flat_b_2_zero.fits  19809.     3.9    2.8  0.750
+     flat_b_3_zero.fits  19258.     3.9    2.8  0.771
+     flat_b_4_zero.fits  8662.2     3.9    2.8  1.715
+     flat_b_5_zero.fits  9713.8     3.9    2.8  1.529
+     flat_b_6_zero.fits  10372.     3.9    2.8  1.432
+
+  Output image = flat-b-n, ncombine = 6
+
+Nov 16 15:55: IMCOMBINE
+  combine = median, scale = mode, zero = none, weight = none
+  reject = ccdclip, mclip = yes, nkeep = 1
+  rdnoise = RDNOISE, gain = GAIN, snoise = 0., sigma = 3., hsigma = 3.
+  blank = 1.
+                Images     Mode Rdnoise   Gain  Scale
+     flat_y_1_zero.fits  6805.4     3.9    2.8  2.145
+     flat_y_2_zero.fits  19142.     3.9    2.8  0.763
+     flat_y_3_zero.fits  19244.     3.9    2.8  0.759
+     flat_y_4_zero.fits  12968.     3.9    2.8  1.126
+     flat_y_5_zero.fits  12344.     3.9    2.8  1.183
+     flat_y_6_zero.fits  17086.     3.9    2.8  0.854
+
+  Output image = flat_y_n, ncombine = 6
