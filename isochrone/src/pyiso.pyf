@@ -3,12 +3,11 @@
 
 python module pyIsochrone ! in 
     interface  ! in :pyIsochrone
-        subroutine pymodels(feh,dist,eby,xa,nfit,imod,vout,byout,ylout,ytout,ygout,ympout,ylmout,rout,nout) ! in :pyIsochrone:pymodels.f
+        subroutine pymodels(feh,dist,eby,xa,imod,vout,byout,ylout,ytout,ygout,ympout,ylmout,rout,nout) ! in :pyIsochrone:pymodels.f
             double precision intent(in) :: feh
             double precision intent(in) :: dist
             double precision intent(in) :: eby
             double precision intent(in) :: xa
-            character*30 intent(in) :: nfit
             integer intent(in) :: imod
             double precision dimension(2000),intent(out) :: vout
             double precision dimension(2000),intent(out) :: byout

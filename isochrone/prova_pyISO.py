@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Call the fortran code models.f from python and properly save the data 
-V,by,L,Teff,g,M,logM,R,Nout = pymodels(0,830,0.03,4300,'try.dat',3)
+V,by,L,Teff,g,M,logM,R,Nout = pymodels(0,830,0.03,4300,3)
 V = V[:Nout] # V
 by = by[:Nout] # b-y
 L = L[:Nout] # log(L/Lsun)

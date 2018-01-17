@@ -1,14 +1,12 @@
-      SUBROUTINE pymodels(feh,dist,eby,XA,nfit,imod,Vout,byout,YLout,
+      SUBROUTINE pymodels(feh,dist,eby,XA,imod,Vout,byout,YLout,
      & YTout,YGout,YMPout,YLMout,Rout,Nout)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
 !f2py double precision, intent(in) :: feh,dist,eby,XA
-!f2py intent(in) :: nfit
 !f2py integer, intent(in) :: imod
 !     feh   metalicity
 !     dist  distance (pc)
 !     eby   reddening
 !     XA    age (Myr)
-!     nfit  name of the output file (30 characters maximum)
 !f2py intent(out) :: Vout,byout,YLout,YTout,YGout,YMPout,YLMout,Rout
       double precision, dimension(2000) :: Vout,byout,YLout,YTout,
      & YGout,YMPout,YLMout,Rout
@@ -23,8 +21,6 @@
       DIMENSION DLAF(1190),XLMF(1190),GF(1190),DLF(1190),DTF(1190)
       DIMENSION XMAS(35,1190),GG(35,1190),DT(35,1190),DLO(35,1190)
       DIMENSION Zint(10)
-
-      CHARACTER*30 NFIT
 
       xmbsun=4.75d0
       Nout=0
@@ -46,7 +42,7 @@ C     print*,'Compute evolutionary track (1) or isochrone (2)?'
 C     print*,' '
 C     read(*,'(i1)') iso
  
- 198  Open(1,file=nfit,status='unknown')
+! 198  Open(1,file=nfit,status='unknown')
 
 ! 199  print*,' '
 !      print*,'Enter the metallicity [Fe/H]'
@@ -61,9 +57,9 @@ C     read(*,'(i1)') iso
         print*,' '
         read(*,*) XME
         XLME=DLOG10(XME)
-        write(1,71) Zest,XME
+!        write(1,71) Zest,XME
  71     Format('# Z = ',f7.4,';  M = ',f7.3,' Msun')
-        write(1,73)
+!        write(1,73)
  73     Format('# log L ','  log T ','  log g ','  age (Myr) ',
      1'  M/Mo  ',' log M ',' R/Ro')
       elseif (iso.eq.2) then
@@ -90,7 +86,7 @@ C     read(*,'(i1)') iso
          XLA=DLOG10(XA*1.d6)
         ENDIF
       else
-        close(1)
+        !close(1)
         goto 197
       endif
 
@@ -245,10 +241,10 @@ C     read(*,'(i1)') iso
 
       IF((Zest-ZM(NZ))*(Zest-ZM(1)).gt.0.) stop 'Fe/H' 
 
-      write(1,72) feh,XA,dist,eby
+!      write(1,72) feh,XA,dist,eby
  72   Format('# [Fe/H] = ',f7.3,';  age = ',f9.3,' Myr;  distance = ',
      1  f9.2,' pc;  E(b-y) = ',f7.3,' mag')
-      write(1,74)
+!      write(1,74)
  74   Format('#   V   ',' (b-y) ','  log L ','  log T ','  log g ',
      1 '   M/Mo  ',' log M ',' R/Ro')
  
@@ -286,8 +282,8 @@ C     read(*,'(i1)') iso
         IF((XLME-DLM(NMA))*(XLME-DLM(1)).gt.0.d0) GOTO 899
       ELSE
         IF((XLME-DLM(NMA))*(XLME-DLM(1)).gt.0.d0) THEN
-          CLOSE(1)
-          GOTO 198
+          !CLOSE(1)
+          GOTO 197
         ENDIF
       ENDIF
 
@@ -303,8 +299,8 @@ C     read(*,'(i1)') iso
         DO 897 J=1,JMP
           XMF(J)=10.D0**(XLMF(J))
           Rad=10.d0**(0.5d0*(4.43772d0-GF(J)+XLMF(J)))
-          WRITE(1,976) DLF(J),DTF(J),GF(J),DLAF(J),
-     1 XMF(J),XLMF(J),Rad
+!          WRITE(1,976) DLF(J),DTF(J),GF(J),DLAF(J),
+!     1 XMF(J),XLMF(J),Rad
 976       FORMAT(3f8.4,f11.4,f8.3,f7.3,f7.3)
 897     CONTINUE
       else
@@ -346,9 +342,9 @@ C       ENDIF
         xmbol=xmbsun-2.5d0*yl
         vmag=xmbol-bcv+distmod+4.27d0*eby
 
-258     WRITE(1,977) vmag,by,YL,YT,YG,YMP,YLM,Rad
-977     FORMAT(f8.3,f7.3,3f8.4,f8.3,2f7.3)
-        vout(k+1) = vmag
+!258     WRITE(1,977) vmag,by,YL,YT,YG,YMP,YLM,Rad
+!977     FORMAT(f8.3,f7.3,3f8.4,f8.3,2f7.3)
+258     vout(k+1) = vmag
         byout(k+1) = by
         ylout(k+1) = YL
         ytout(k+1) = YT
@@ -356,13 +352,13 @@ C       ENDIF
         ympout(k+1) = YMP
         ylmout(k+1) = YLM
         rout(k+1) = Rad
- 
+
         K=K+1
         GOTO 499
 
       endif
 
-899   CLOSE(1)
+899   CONTINUE
       Nout=K
 !      STOP
       END subroutine pymodels
