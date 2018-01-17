@@ -1,29 +1,85 @@
 from pyIsochrone import pymodels
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.optimize as opt
 
 # Call the fortran code models.f from python and properly save the data 
-V,by,L,Teff,g,M,logM,R,Nout = pymodels(0,830,0.03,4300,3)
-V = V[:Nout] # V
-by = by[:Nout] # b-y
-L = L[:Nout] # log(L/Lsun)
-Teff = Teff[:Nout] # log(Teff)
-g = g[:Nout] # log g
-M = M[:Nout] # M/Msun
-logM = logM[:Nout] # log(M/Msun)
-R = R[:Nout] # R/Rsun
+def call_pymodels(z,dist,eby,age,model):
+    V,by,L,Teff,g,M,logM,R,Nout = pymodels(z,dist,eby,age,model)
+    V = V[:Nout] # V
+    by = by[:Nout] # b-y
+    L = L[:Nout] # log(L/Lsun)
+    Teff = Teff[:Nout] # log(Teff)
+    g = g[:Nout] # log g
+    M = M[:Nout] # M/Msun
+    logM = logM[:Nout] # log(M/Msun)
+    R = R[:Nout] # R/Rsun
+    return V,by,L,Teff,g,M,logM,R
 
+V,by,L,Teff,g,M,logM,R = call_pymodels(0,830,0.03,4300,3)
 # plot the results
-plt.plot(by,V)
-plt.show()
+plt.figure()
+plt.subplot(121)
+plt.plot(by,V,'+')
 
 # load stars.lst
 stars = np.loadtxt('stars_std.lst')
 
 # remove the blue stragglers and foreground/background stars from the data
-## CODE MISSING
+stars_filtered = stars[stars[:,2]>0.25,:] # remove all stars with b-y<0.25
+stars_filtered = stars_filtered[(stars_filtered[:,2]*10+11.5)>stars_filtered[:,0],:] # remove all stars over the line V=10(b-y)+11.5
+stars_filtered = stars_filtered[(stars_filtered[:,2]*(-7.9)+14.7)<stars_filtered[:,0],:] # remove all stars below the line V=-7.9(b-y)+14.7
+Vs = stars_filtered[:,0]
+bys = stars_filtered[:,2]
+
+# Show the filtered data and the real data to visually check the filtering makes sense
+plt.plot(bys, Vs,'.',label='Observations',color='k',markersize=2)
+plt.subplot(122)
+plt.plot(stars[:,2], stars[:,0],'.',label='Observations',color='k',markersize=2)
+plt.plot(by,V,'+')
+#plt.show()
+
 
 # minimize the MSE between data and isochrone in order to find optimum age, metalicity, reddening and distance
+Mones = np.ones((len(stars_filtered[:,2]),2000))
+def mse_iso(z,dist,reddening,age,model):
+    V,by,L,Teff,g,M,logM,R = call_pymodels(z,dist,reddening,age,model)
+    N = len(V)
+    Viso_Vs = ((Mones[:,:N]*V).transpose()-Vs)**2
+    byiso_bys = ((Mones[:,:N]*by).transpose()-bys)**2
+    msemat = Viso_Vs+byiso_bys
+    msevec = np.min(msemat,axis=0)
+    return sum(msevec)
 
+def mse_weight(z,dist,reddening,age,model):
+    V,by,L,Teff,g,M,logM,R = call_pymodels(z,dist,reddening,age,model)
+    N = len(V)
+    Viso_Vs = ((Mones[:,:N]*V).transpose()-Vs)**2/Vs
+    byiso_bys = ((Mones[:,:N]*by).transpose()-bys)**2/bys
+    msemat = Viso_Vs+byiso_bys
+    msevec = np.min(msemat,axis=0)
+    return sum(msevec)
 
 # print the final values
+bnds = ((0,0.1),(None,None),(0,None),(None,None))
+res = opt.minimize(lambda x: mse_iso(x[0],x[1],x[2],x[3],3),[0,830,0.03,4300],bounds=bnds)
+print res
+
+res_weight = opt.minimize(lambda x: mse_weight(x[0],x[1],x[2],x[3],3),[0,830,0.03,4400],bounds=bnds)
+print res_weight
+
+V,by,L,Teff,g,M,logM,R = call_pymodels(*res_weight['x'],model=3)
+plt.figure()
+plt.plot(by,V)
+plt.plot(stars[:,2], stars[:,0],'.',label='Observations',color='k',markersize=2)
+
+fix_z = 0.01
+fix_eby = 0.035
+res_weight = opt.minimize(lambda x: mse_weight(fix_z,x[0],fix_eby,x[1],3),[830,4300])
+print res_weight
+
+V,by,L,Teff,g,M,logM,R = call_pymodels(fix_z,res_weight['x'][0],fix_eby,res_weight['x'][1],model=3)
+plt.figure()
+plt.plot(by,V)
+plt.plot(stars[:,2], stars[:,0],'.',label='Observations',color='k',markersize=2)
+plt.show()
