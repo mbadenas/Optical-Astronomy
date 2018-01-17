@@ -350,7 +350,7 @@ C       ENDIF
       endif
 
 899   CLOSE(1)
-      STOP
+!      STOP
       END subroutine pymodels
 C********************************************************************
       Subroutine polint(n,x,y,xa,ya,yb,Kpu,j,ico)
