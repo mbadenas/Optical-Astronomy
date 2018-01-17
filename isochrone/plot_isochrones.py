@@ -24,12 +24,14 @@ Vs = stars[:,0]
 bys = stars[:,2]
 
 # plot isochrones and data for many combinations
-fcolors=['b','g','r','c']
+fcolors=['g','b','r','c']
 linestyle=['-','--','-.',':',(0,(5, 1.5, 1, 1.5, 1, 1.5))]
 zvec = np.array([0,0.01])
 ebyvec = np.array([0.03,0.035,0.04])
 dvec = np.arange(700,901,100)
+dvec = [700,900]
 agevec = np.arange(4200,4701,100)
+agevec = [4100,4300,4500,4700]
 mod_names = ['Cassisi (overshoot)','Cassisi (canonical)','Padova']
 leg_models = []
 leg_dist = []
@@ -44,7 +46,7 @@ for z in zvec:
         fig = plt.figure()
         fig.suptitle('z=%.1g  eby=%.2g' %(z,eby))
         for i,age in enumerate(agevec):
-            ax = fig.add_subplot(2,3,i+1)
+            ax = fig.add_subplot(2,2,i+1)
             ax.plot(bys, Vs,'.',label='Observations',color='k',markersize=2)
             ax.set_xlabel('b-y')
             ax.set_ylabel('V')
