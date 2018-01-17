@@ -1,0 +1,61 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module pyIsochrone ! in 
+    interface  ! in :pyIsochrone
+        subroutine pymodels(feh,dist,eby,xa,nfit,imod,vout,byout,ylout,ytout,ygout,ympout,ylmout,rout) ! in :pyIsochrone:pymodels.f
+            double precision intent(in) :: feh
+            double precision intent(in) :: dist
+            double precision intent(in) :: eby
+            double precision intent(in) :: xa
+            character*30 intent(in) :: nfit
+            integer intent(in) :: imod
+            double precision dimension(730),intent(out) :: vout
+            double precision dimension(730),intent(out) :: byout
+            double precision dimension(730),intent(out) :: ylout
+            double precision dimension(730),intent(out) :: ytout
+            double precision dimension(730),intent(out) :: ygout
+            double precision dimension(730),intent(out) :: ympout
+            double precision dimension(730),intent(out) :: ylmout
+            double precision dimension(730),intent(out) :: rout
+        end subroutine pymodels
+        subroutine polint(n,x,y,xa,ya,yb,kpu,j,ico) ! in :pyIsochrone:pymodels.f
+            integer :: n
+            double precision :: x
+            double precision :: y
+            double precision dimension(35) :: xa
+            double precision dimension(35) :: ya
+            double precision dimension(35,1190) :: yb
+            integer :: kpu
+            integer :: j
+            integer :: ico
+        end subroutine polint
+        subroutine uvby(mode,fe,gv,teff,sby,sm1,sc1,bcv) ! in :pyIsochrone:pymodels.f
+            integer :: mode
+            double precision :: fe
+            double precision :: gv
+            double precision :: teff
+            double precision :: sby
+            double precision :: sm1
+            double precision :: sc1
+            double precision :: bcv
+        end subroutine uvby
+        subroutine lgran4(x,a,xx) ! in :pyIsochrone:pymodels.f
+            real*8 dimension(4) :: x
+            real*8 dimension(4) :: a
+            double precision :: xx
+        end subroutine lgran4
+        subroutine intep(xp,p,x,f,n,ier) ! in :pyIsochrone:pymodels.f
+            double precision :: xp
+            double precision :: p
+            double precision dimension(13) :: x
+            double precision dimension(13) :: f
+            integer :: n
+            integer :: ier
+            entry eintep(xp,p,x,f,n,ier)
+        end subroutine intep
+    end interface 
+end python module pyIsochrone
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
