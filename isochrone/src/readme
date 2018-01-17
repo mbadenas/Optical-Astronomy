@@ -1,2 +1,0 @@
-To compile the module pyIsochrone (.so) file, execute the following line inside the folder isochron/src/
-f2py -c pyiso.pyf pymodels.f
