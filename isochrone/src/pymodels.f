@@ -1,5 +1,6 @@
       SUBROUTINE pymodels(feh,dist,eby,XA,nfit,imod,Vout,byout,YLout,
-     & YTout,YGout,YMPout,YLMout,Rout)
+     & YTout,YGout,YMPout,YLMout,Rout,Nout)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
 !f2py double precision, intent(in) :: feh,dist,eby,XA
 !f2py intent(in) :: nfit
 !f2py integer, intent(in) :: imod
@@ -8,8 +9,11 @@
 !     eby   reddening
 !     XA    age (Myr)
 !     nfit  name of the output file (30 characters maximum)
-!f2py double precision, dimension(730),intent(out) :: Vout,byout,YLout,YTout,YGout,YMPout,YLMout,Rout
-      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+!f2py intent(out) :: Vout,byout,YLout,YTout,YGout,YMPout,YLMout,Rout
+      double precision, dimension(2000) :: Vout,byout,YLout,YTout,
+     & YGout,YMPout,YLMout,Rout
+!f2py intent(out) :: Nout
+      integer :: Nout
 
       DIMENSION DLO0(35,1190,10),DLM0(35,10),DT0(35,1190,10)
       DIMENSION GG0(35,1190,10),XMAS0(35,1190,10),ZM(10)
@@ -23,6 +27,7 @@
       CHARACTER*30 NFIT
 
       xmbsun=4.75d0
+      Nout=0
 
 !117   print*,'Which set of evolutionary models?'
 !      print*,' 1.- Cassisi overshooting '
@@ -343,6 +348,14 @@ C       ENDIF
 
 258     WRITE(1,977) vmag,by,YL,YT,YG,YMP,YLM,Rad
 977     FORMAT(f8.3,f7.3,3f8.4,f8.3,2f7.3)
+        vout(k+1) = vmag
+        byout(k+1) = by
+        ylout(k+1) = YL
+        ytout(k+1) = YT
+        ygout(k+1) = YG
+        ympout(k+1) = YMP
+        ylmout(k+1) = YLM
+        rout(k+1) = Rad
  
         K=K+1
         GOTO 499
@@ -350,6 +363,7 @@ C       ENDIF
       endif
 
 899   CLOSE(1)
+      Nout=K
 !      STOP
       END subroutine pymodels
 C********************************************************************

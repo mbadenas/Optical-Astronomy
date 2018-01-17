@@ -3,21 +3,22 @@
 
 python module pyIsochrone ! in 
     interface  ! in :pyIsochrone
-        subroutine pymodels(feh,dist,eby,xa,nfit,imod,vout,byout,ylout,ytout,ygout,ympout,ylmout,rout) ! in :pyIsochrone:pymodels.f
+        subroutine pymodels(feh,dist,eby,xa,nfit,imod,vout,byout,ylout,ytout,ygout,ympout,ylmout,rout,nout) ! in :pyIsochrone:pymodels.f
             double precision intent(in) :: feh
             double precision intent(in) :: dist
             double precision intent(in) :: eby
             double precision intent(in) :: xa
             character*30 intent(in) :: nfit
             integer intent(in) :: imod
-            double precision dimension(730),intent(out) :: vout
-            double precision dimension(730),intent(out) :: byout
-            double precision dimension(730),intent(out) :: ylout
-            double precision dimension(730),intent(out) :: ytout
-            double precision dimension(730),intent(out) :: ygout
-            double precision dimension(730),intent(out) :: ympout
-            double precision dimension(730),intent(out) :: ylmout
-            double precision dimension(730),intent(out) :: rout
+            double precision dimension(2000),intent(out) :: vout
+            double precision dimension(2000),intent(out) :: byout
+            double precision dimension(2000),intent(out) :: ylout
+            double precision dimension(2000),intent(out) :: ytout
+            double precision dimension(2000),intent(out) :: ygout
+            double precision dimension(2000),intent(out) :: ympout
+            double precision dimension(2000),intent(out) :: ylmout
+            double precision dimension(2000),intent(out) :: rout
+            integer intent(out) :: nout
         end subroutine pymodels
         subroutine polint(n,x,y,xa,ya,yb,kpu,j,ico) ! in :pyIsochrone:pymodels.f
             integer :: n
