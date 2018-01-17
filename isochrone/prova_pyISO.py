@@ -1,7 +1,9 @@
 from pyIsochrone import pymodels
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 import scipy.optimize as opt
+from cycler import cycler
 
 # Call the fortran code models.f from python and properly save the data 
 def call_pymodels(z,dist,eby,age,model):
@@ -37,7 +39,7 @@ plt.plot(bys, Vs,'.',label='Observations',color='k',markersize=2)
 plt.subplot(122)
 plt.plot(stars[:,2], stars[:,0],'.',label='Observations',color='k',markersize=2)
 plt.plot(by,V,'+')
-#plt.show()
+plt.show()
 
 
 # minimize the MSE between data and isochrone in order to find optimum age, metalicity, reddening and distance
@@ -60,26 +62,4 @@ def mse_weight(z,dist,reddening,age,model):
     msevec = np.min(msemat,axis=0)
     return sum(msevec)
 
-# print the final values
-bnds = ((0,0.1),(None,None),(0,None),(None,None))
-res = opt.minimize(lambda x: mse_iso(x[0],x[1],x[2],x[3],3),[0,830,0.03,4300],bounds=bnds)
-print res
 
-res_weight = opt.minimize(lambda x: mse_weight(x[0],x[1],x[2],x[3],3),[0,830,0.03,4400],bounds=bnds)
-print res_weight
-
-V,by,L,Teff,g,M,logM,R = call_pymodels(*res_weight['x'],model=3)
-plt.figure()
-plt.plot(by,V)
-plt.plot(stars[:,2], stars[:,0],'.',label='Observations',color='k',markersize=2)
-
-fix_z = 0.01
-fix_eby = 0.035
-res_weight = opt.minimize(lambda x: mse_weight(fix_z,x[0],fix_eby,x[1],3),[830,4300])
-print res_weight
-
-V,by,L,Teff,g,M,logM,R = call_pymodels(fix_z,res_weight['x'][0],fix_eby,res_weight['x'][1],model=3)
-plt.figure()
-plt.plot(by,V)
-plt.plot(stars[:,2], stars[:,0],'.',label='Observations',color='k',markersize=2)
-plt.show()
